@@ -54,6 +54,50 @@ on **MNIST** and **CIFAR‑10**, comparing **accuracy**, **training time**, and
   - the ViT attention block in `vit_models.py`
   - the RPE mechanisms defined in `positional_encodings.py`.
 
+### ViT Attention Block (Math Overview)
+
+Given an input sequence \(x \in \mathbb{R}^{B \times N \times D}\) with batch size \(B\),
+sequence length \(N\), and model dimension \(D\):
+
+\[
+Q = x W_Q,\quad K = x W_K,\quad V = x W_V,\quad
+W_Q, W_K, W_V \in \mathbb{R}^{D \times D}.
+\]
+
+Before splitting into heads, we apply a positional encoding module:
+
+\[
+(Q_{\text{pos}}, K_{\text{pos}}) = \text{pos\_module}(Q, K, \text{pos}),
+\]
+
+where `pos` encodes token positions (CLS token + patch indices).  
+The module may be RoPE-only, Cayley-STRING, reflection-based STRING,
+or sparse-S Cayley-STRING.
+
+For multi-head attention, let \(D_h = D / h\) be the per-head dimension and
+reshape \((Q_{\text{pos}}, K_{\text{pos}}, V)\) into \((B, h, N, D_h)\). For each head:
+
+\[
+\text{scores} = \frac{Q_{\text{pos}} K_{\text{pos}}^\top}{\sqrt{D_h}},\quad
+\alpha = \text{softmax}(\text{scores}, \text{dim} = -1),\quad
+\text{context} = \alpha V.
+\]
+
+Heads are concatenated and projected with \(W_O \in \mathbb{R}^{D \times D}\) to get the
+final attention output.
+
+The transformer encoder block with LayerNorm and an MLP block \(\text{MLP}(\cdot)\) is:
+
+\[
+x' = x + \text{MHA}(\text{LayerNorm}(x), \text{pos}),
+\]
+\[
+y = x' + \text{MLP}(\text{LayerNorm}(x')).
+\]
+
+In the ViT, a learned CLS token is prepended, the encoder blocks are stacked, and the
+final CLS representation is fed to a linear layer for classification.
+
 ### How to Use
 
 - **Implement Part 1 (math/TODOs)**:  
