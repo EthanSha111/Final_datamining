@@ -43,11 +43,11 @@ on **MNIST** and **CIFAR‑10**, comparing **accuracy**, **training time**, and
   - `run_experiment(config, device)`: full train + eval + timing for a variant
 
 - **`mnist_experiments.ipynb`**  
-  Notebook to run and compare RPE variants on MNIST:
+  Notebook to run and compare RPE variants on MNIST and CIFAR-10:
   - RoPE baseline
-  - Cayley-STRING (dense S)
+  - Cayley-STRING (dense \(S\))
   - Reflection-STRING
-  - Sparse-S Cayley-STRING for several \(f\) values
+  - Sparse-S Cayley-STRING for several \(f\) values (with sparse CG solver)
 
 - **`positional_encodings_math.md`**  
   Short derivation-style document explaining the key equations used in:
