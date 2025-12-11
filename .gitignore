@@ -1,0 +1,15 @@
+# Bytecode and caches
+__pycache__/
+*.py[cod]
+
+# Jupyter artifacts
+.ipynb_checkpoints/
+
+# Dataset artifacts and archives
+data/
+*.tar
+*.tar.gz
+*.zip
+
+# OS files
+.DS_Store
